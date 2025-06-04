@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Neuron Science Club</title>
+  <style>
+    body {
+      background-color: #002b00;
+      margin: 0;
+      height: 100vh;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      transition: background-color 1.5s ease;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 30px;
+      font-weight: bold;
+      white-space: nowrap;
+      max-width: 800px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .text-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .text {
+      white-space: nowrap;
+      overflow: hidden;
+      font-weight: bold;
+      font-size: 42px;
+      color: #d58cff;
+      transition: color 1s ease;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      background-color: #d58cff;
+      border-radius: 50%;
+      margin-left: 8px;
+      animation: pulse 1s infinite;
+      transition: background-color 1s ease, transform 0.1s;
+      box-shadow: 0 0 5px rgba(213, 140, 255, 0.7);
+      position: relative;
+      top: 4px;
+    }
+
+    .box {
+      width: 4cm;
+      height: 1cm;
+      background-color: transparent;
+      border: 2px solid #d58cff;
+      border-radius: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      color: #d58cff;
+      font-weight: bold;
+      font-size: 1.8rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+      text-decoration: none;
+    }
+
+    .box:hover {
+      transform: scale(1.1);
+      background-color: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 16px rgba(255, 255, 255, 0.3);
+      border-color: #d58cff;
+      color: #d58cff;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <div class="logo">
+        <div class="text-wrapper">
+          <div id="typingText" class="text"></div>
+          <div id="dot" class="dot"></div>
+        </div>
+      </div>
+      <a href="2nd page.html" class="box">Let's Go</a>
+    </div>
+  </div>
+
+  <script>
+    const texts = [
+      "Welcome to Neuron Science Club",
+      "Let's visit our Website"
+    ];
+
+    const typingElement = document.getElementById("typingText");
+    const dot = document.getElementById("dot");
+    const body = document.body;
+
+    let textIndex = 0;
+    let charIndex = 0;
+    const speed = 70;
+
+    const colorThemes = [
+      { background: "#002b00", text: "#d58cff" },
+      { background: "#f5f5dc", text: "#007f5f" },
+      { background: "#001f33", text: "#ffcc00" }
+    ];
+
+    let themeIndex = 0;
+
+    function updateDotPosition() {
+      const width = typingElement.offsetWidth;
+      dot.style.transform = `translateX(${width}px)`;
+    }
+
+    function applyTheme(theme) {
+      body.style.backgroundColor = theme.background;
+      typingElement.style.color = theme.text;
+      dot.style.backgroundColor = theme.text;
+      const box = document.querySelector(".box");
+      box.style.borderColor = theme.text;
+      box.style.color = theme.text;
+    }
+
+    function typeWriter() {
+      if (charIndex < texts[textIndex].length) {
+        typingElement.textContent += texts[textIndex].charAt(charIndex);
+        charIndex++;
+        updateDotPosition();
+        setTimeout(typeWriter, speed);
+      } else {
+        setTimeout(() => {
+          typingElement.textContent = "";
+          charIndex = 0;
+          textIndex = (textIndex + 1) % texts.length;
+
+          // দুটি লেখা শেষ হলে (মানে আবার প্রথম লেখায় ফিরে এলে), থিম পরিবর্তন করো
+          if (textIndex === 0) {
+            themeIndex = (themeIndex + 1) % colorThemes.length;
+            applyTheme(colorThemes[themeIndex]);
+          }
+
+          updateDotPosition();
+          typeWriter();
+        }, 3000);
+      }
+    }
+
+    applyTheme(colorThemes[themeIndex]);
+    typeWriter();
+  </script>
+</body>
+</html>
